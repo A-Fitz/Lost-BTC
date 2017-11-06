@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+      <title>Past BTC Calc.</title>
+      <!-- CSS  -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+      <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+   </head>
+   <body>
+      <div class="section no-pad-bot" id="index-banner">
+         <div class="container">
+            <br><br>
+            <h1 class="header center amber-text text-darken-3">How much have you lost?</h1>
+            <br><br>
+         </div>
+      </div>
+      <div class="container">
+         <div class="section center-align">
+            <form class="form-horizontal" role="form" name="form" novalidate>
+            <div class="row">
+               <div class="col s2 offset-s2">
+                  <select id="selectAmount">
+                     <option value="BTC" selected >BTC</option>
+                     <option value="USD">USD</option>
+                  </select>
+                  </ul>
+               </div>
+               <div class="input-field col s4 " style="margin-top: -0.05%;">
+                  <input placeholder="Amount" id="amount" type="number" class="validate">
+               </div>
+               <div class="input-field col s2" style="margin-top: -0.05%;">
+                  <input type="text" placeholder="Date" class="datepicker">
+               </div>
+            </div>
+            <a id="button" class="btn-floating btn-large waves-effect waves-light amber darken-3"><i class="material-icons">arrow_downward</i></a>
+            <br><br>
+            <h4 class="amber-text text-darken-3">btc lost:
+               <b id="total"></b>
+            </h4>
+            <h4 class="amber-text text-darken-3">usd lost:
+               <b id="total2"></b>
+            </h4>
+         </div>
+         <br><br>
+      </div>
+      <!--  Scripts-->
+      <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.9/angular.min.js"></script>
+      <script>
+         $(document).ready(function() {
+             $('select').material_select();
+         
+         
+             $('.datepicker').pickadate({
+                 selectMonths: true, // Creates a dropdown to control month
+                 selectYears: true,
+                 min: new Date(2012, 0, 1),
+                 max: -1,
+                 today: 'Today',
+                 clear: 'Clear',
+                 close: 'Ok',
+                 closeOnSelect: false // Close upon selecting a date,
+         
+             });
+         
+         
+         
+             var oldprice;
+             var newprice;
+         
+         
+             $("#button").click(function() {
+                 var unix = String($('.datepicker').pickadate('picker').get('select').pick);
+                 unix = unix.substring(0, unix.length - 3);
+         
+                 var val = $("#selectAmount option:selected").text();
+                 if (val === "BTC") {
+                     $.get("https://winkdex.com/api/v0/price?time=" + (unix), function(data) {
+                             var key1 = "price";
+                             oldprice = data[key1] * 0.01;
+                         })
+                         .done(function() {
+                             $.get("https://winkdex.com/api/v0/price?time=", function(data) {
+                                     var key2 = "price";
+                                     newprice = (data[key2]) * 0.01;
+                                 })
+                                 .done(function() {
+                                     console.log("oldprice: " + oldprice);
+                                     console.log("newprice: " + newprice);
+         
+                                     var amount = $('#amount').val();
+                                     console.log("amount: " + amount);
+         
+                                     var oldbtc = amount;
+                                     console.log("oldbtc: " + oldbtc);
+         
+                                     var oldusd = amount * oldprice;
+                                     var newusd = amount * newprice;
+         
+                                     var temp = newusd - oldusd;
+         
+         
+                                     var output = temp / newprice;
+                                     console.log("output: " + output);
+         
+                                     $('#total').text(output);
+                                     $('#total2').text(output * newprice);
+                                 })
+         
+                         });
+                 } else if (val === "USD") {
+                     $.get("https://winkdex.com/api/v0/price?time=" + (unix), function(data) {
+                             var key1 = "price";
+                             oldprice = data[key1] * 0.01;
+                         })
+                         .done(function() {
+                             $.get("https://winkdex.com/api/v0/price?time=", function(data) {
+                                     var key2 = "price";
+                                     newprice = (data[key2]) * 0.01;
+                                 })
+                                 .done(function() {
+                                     console.log("oldprice: " + oldprice);
+                                     console.log("newprice: " + newprice);
+         
+                                     var amount = $('#amount').val();
+                                     console.log("amount: " + amount);
+         
+                                     var oldbtc = oldprice / amount;
+                                     console.log("oldbtc: " + oldbtc);
+                                     var newbtc = newprice / amount;
+                                     console.log("newbtc: " + newbtc);
+         
+                                     var output = newbtc - oldbtc;
+                                     console.log("output: " + output);
+         
+                                     $('#total').text(output);
+                                     $('#total2').text(output * newprice);
+                                 })
+         
+                         });
+                 }
+             });
+         
+         
+         
+         
+         });
+      </script>
+      <script src="js/materialize.js"></script>
+      </script>
+      <style>
+         body {
+         display: flex;
+         min-height: 100vh;
+         flex-direction: column;
+         }
+         main {
+         flex: 1 0 auto;
+         }
+      </style>
+   </body>
+</html>
