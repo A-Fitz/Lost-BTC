@@ -122,22 +122,29 @@
                                      newprice = (data[key2]) * 0.01;
                                  })
                                  .done(function() {
+
+                                
                                      console.log("oldprice: " + oldprice);
                                      console.log("newprice: " + newprice);
+                                
+                                     var variable = newprice/oldprice;
+                                     console.log("percent: " + variable);
          
                                      var amount = $('#amount').val();
                                      console.log("amount: " + amount);
-         
-                                     var oldbtc = oldprice / amount;
+                                
+                                     var oldbtc = amount / oldprice;
                                      console.log("oldbtc: " + oldbtc);
-                                     var newbtc = newprice / amount;
-                                     console.log("newbtc: " + newbtc);
          
-                                     var output = newbtc - oldbtc;
+                                     var newusd = newprice * oldbtc;
+                                     console.log("newusd: " + newusd);
+         
+         
+                                     var output = newusd - amount;
                                      console.log("output: " + output);
          
-                                     $('#total').text(output);
-                                     $('#total2').text(output * newprice);
+                                     $('#total').text(output / newprice);
+                                     $('#total2').text(output);
                                  })
          
                          });
@@ -160,6 +167,19 @@
          main {
          flex: 1 0 auto;
          }
+         
+         .page-footer {
+    padding-top: 0px;
+}
       </style>
+   
+<footer class="page-footer amber darken-3">
+          
+          <div class="footer-copyright">
+            <div class="container">
+            <a class="grey-text text-lighten-4" href="http://afitz.me">My Main Site</a>
+            </div>
+          </div>
+        </footer>
    </body>
 </html>
