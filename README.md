@@ -1,5 +1,5 @@
 # Lost-BTC
-A webpage to calculate how much your past Bitcoin would be worth. Uses the awesome @WinkDex API to pull historical BTC prices.
+A webpage to calculate how much your past Bitcoin would be worth.
 
 
-### [Site](http://afitz.me/pages/LostBTC)
+### DEPRECIATED because WinkDex suddenly halted their API
